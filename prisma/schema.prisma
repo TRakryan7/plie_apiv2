@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Users {
+  id String @id @default(uuid())
+  firstName String
+  lastName String
+  username String
+  email String @unique
+  password String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?  
+}
+
+model Items {
+  id String @id @default(uuid())
+  itemCode String @unique
+  itemDescription String
+  itemName String
+  size String
+  color String
+  category String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  stocks Stock[]
+}
+
+model Warehouses {
+  id String @id @default(uuid())
+  warehouseCode String
+  warehouseName String
+  note String  
+  address String  
+  city String
+  isPrimary Boolean @default(false)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  shelves Shelves[] 
+  stocks Stock []
+}
+
+model Shelves {
+  id String @id @default(uuid())
+  shelfCode String
+  shelfName String
+  warehouseId String
+  isPrimary Boolean @default(false)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  warehouse Warehouses @relation(fields: [warehouseId], references: [id])
+  stocks Stock[]
+}
+
+model Rows {
+  id String @id @default(uuid())
+  rowCode String
+  rowName String
+  isPrimary Boolean @default(false)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  stock Stock?
+}
+
+model Stock {
+  id String @id @default(uuid())
+  stockTotal Int
+  stockIn Int
+  stockOut Int
+  period Int
+  itemDescription String
+  itemCode String
+  size String
+  color String
+  category String
+  warehouseName String
+  warehouseCode String
+  shelfName String
+  shelfCode String
+  rowName String
+  rowCode String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  itemId String
+  warehouseId String
+  shelvesId String
+  rowsId String @unique
+  item Items @relation(fields: [itemId], references: [id])
+  warehouse Warehouses @relation(fields: [warehouseId], references: [id])
+  shelf Shelves @relation(fields: [shelvesId], references: [id])
+  row Rows @relation(fields: [rowsId], references: [id])  
+}
+
+model Period {
+  id String @id @default(uuid())
+}
+
+// model movingHeader {
+//   id String @id @default(uuid())
+//   documentCode String @unique
+//   period Int
+//   total Int
+//   note String
+//   isActive Boolean @default(true)
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   deletedAt DateTime?
+//   createdBy  String
+//   updatedBy String
+//   deletedBy String?
+//     // @OneToOne(()=>Warehouse)
+//     // @JoinColumn()
+//     // warehouse: Warehouse;
+
+// }
+
+// model movingDetail {
+//   id String @id @default(uuid())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   deletedAt DateTime?
+//   createdBy  String
+//   updatedBy String
+//   deletedBy String?
+// }
+
+// model opnameHeader {
+//   id String @id @default(uuid())
+//   documentCode String @unique
+//   period Int
+//   total Int
+//   note String
+//   isActive Boolean @default(true)
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   deletedAt DateTime?
+//   createdBy  String
+//   updatedBy String
+//   deletedBy String? 
+// }
+
+// model opnameDetail {
+//   id String @id @default(uuid())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   deletedAt DateTime?
+//   createdBy  String
+//   updatedBy String
+//   deletedBy String?
+// }
