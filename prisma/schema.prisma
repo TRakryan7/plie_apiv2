@@ -37,6 +37,8 @@ model Items {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   stocks Stock[]
+  movingDetail movingDetail[]
+  opnameDetail opnameDetail[]
 }
 
 model Warehouses {
@@ -53,6 +55,8 @@ model Warehouses {
   deletedAt DateTime?
   shelves Shelves[] 
   stocks Stock []
+  movingHeader movingHeader[]
+  opnameHeader opnameHeader[]
 }
 
 model Shelves {
@@ -67,6 +71,8 @@ model Shelves {
   deletedAt DateTime?
   warehouse Warehouses @relation(fields: [warehouseId], references: [id])
   stocks Stock[]
+  movingDetail movingDetail[]
+  opnameDetail opnameDetail[]
 }
 
 model Rows {
@@ -79,6 +85,8 @@ model Rows {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   stock Stock?
+  movingDetail movingDetail[]
+  opnameDetail opnameDetail[]
 }
 
 model Stock {
@@ -116,56 +124,83 @@ model Period {
   id String @id @default(uuid())
 }
 
-// model movingHeader {
-//   id String @id @default(uuid())
-//   documentCode String @unique
-//   period Int
-//   total Int
-//   note String
-//   isActive Boolean @default(true)
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   deletedAt DateTime?
-//   createdBy  String
-//   updatedBy String
-//   deletedBy String?
-//     // @OneToOne(()=>Warehouse)
-//     // @JoinColumn()
-//     // warehouse: Warehouse;
+model movingHeader {
+  id String @id @default(uuid())
+  documentCode String @unique
+  period Int
+  total Int
+  note String
+  warehouseId String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  createdBy  String
+  updatedBy String
+  deletedBy String?
+    // @OneToOne(()=>Warehouse)
+    // @JoinColumn()
+  warehouse Warehouses @relation(fields: [warehouseId], references: [id])
 
-// }
+}
 
-// model movingDetail {
-//   id String @id @default(uuid())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   deletedAt DateTime?
-//   createdBy  String
-//   updatedBy String
-//   deletedBy String?
-// }
+model movingDetail {
+  id String @id @default(uuid())
+  itemDescription String
+  size String
+  category String
+  color String
+  total Int
+  shelvesId String
+  itemId String
+  rowsId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  createdBy  String
+  updatedBy String
+  deletedBy String?
+  item Items @relation(fields: [itemId], references: [id])
+  shelf Shelves @relation(fields: [shelvesId], references: [id])
+  row Rows @relation(fields: [rowsId], references: [id])  
+}
 
-// model opnameHeader {
-//   id String @id @default(uuid())
-//   documentCode String @unique
-//   period Int
-//   total Int
-//   note String
-//   isActive Boolean @default(true)
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   deletedAt DateTime?
-//   createdBy  String
-//   updatedBy String
-//   deletedBy String? 
-// }
+model opnameHeader {
+  id String @id @default(uuid())
+  documentCode String @unique
+  period Int
+  total Int
+  note String
+  warehouseId String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  createdBy  String
+  updatedBy String
+  deletedBy String? 
+  warehouse Warehouses @relation(fields: [warehouseId], references: [id])
+}
 
-// model opnameDetail {
-//   id String @id @default(uuid())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   deletedAt DateTime?
-//   createdBy  String
-//   updatedBy String
-//   deletedBy String?
-// }
+model opnameDetail {
+  id String @id @default(uuid())
+  itemDescription String
+  size String
+  category String
+  color String
+  total Int
+  totalSystem Int
+  difference Int
+  shelvesId String
+  itemId String
+  rowsId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  createdBy  String
+  updatedBy String
+  deletedBy String?
+  item Items @relation(fields: [itemId], references: [id])
+  shelf Shelves @relation(fields: [shelvesId], references: [id])
+  row Rows @relation(fields: [rowsId], references: [id])  
+}
