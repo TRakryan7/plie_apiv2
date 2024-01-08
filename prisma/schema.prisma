@@ -122,6 +122,7 @@ model Stock {
 
 model Period {
   id String @id @default(uuid())
+  periodCode Int
 }
 
 model movingHeader {
