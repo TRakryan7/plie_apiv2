@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PeriodParams } from './entity/period.types';
 
 @Injectable()
 export class PeriodService {
   constructor(private prisma: PrismaService) {}
 
-  async createPeriode(data: PeriodParams) {
+  async createPeriode() {
     const date = new Date();
     const getMonth = date.getMonth() + 1;
     const getYear = date.getFullYear();
@@ -18,11 +17,12 @@ export class PeriodService {
     }
 
     const periodCollect = periodMonth + periodYear;
-    data.periodCode = Number(periodCollect);
-
-    await this.prisma.period.create({
-      data,
+    const resultPeriod = await this.prisma.period.create({
+      data: {
+        periodCode: Number(periodCollect),
+      },
     });
+    return resultPeriod.periodCode;
   }
 
   async findPeriod(periodName: number) {
@@ -31,8 +31,10 @@ export class PeriodService {
         periodCode: periodName,
       },
     });
-    // if(!getPeriod){
-    //   const createPeriod = this.createPeriode()
-    // }
+    if (!getPeriod) {
+      const getPeriod = await this.createPeriode();
+      return getPeriod;
+    }
+    return getPeriod;
   }
 }
