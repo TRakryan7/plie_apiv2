@@ -51,11 +51,15 @@ export class ShelvesService {
   }
 
   async deleteShelf(shelfId: string) {
-    const getDate = new Date(Date.now());
-    const deletedShelf = await this.prisma.shelves.update({
-      data: {
-        deletedAt: getDate,
+    const getShelf = await this.prisma.shelves.findUnique({
+      where: {
+        id: shelfId,
       },
+    });
+    getShelf.deletedAt = new Date(Date.now());
+    const data = getShelf;
+    const deletedShelf = await this.prisma.shelves.update({
+      data,
       where: {
         id: shelfId,
       },

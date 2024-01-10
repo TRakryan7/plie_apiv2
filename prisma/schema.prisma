@@ -53,7 +53,8 @@ model Warehouses {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
-  shelves Shelves[] 
+  shelves Shelves[]
+  rows Rows[] 
   stocks Stock []
   movingHeader movingHeader[]
   opnameHeader opnameHeader[]
@@ -71,6 +72,7 @@ model Shelves {
   deletedAt DateTime?
   warehouse Warehouses @relation(fields: [warehouseId], references: [id])
   stocks Stock[]
+  rows Rows[]
   movingDetail movingDetail[]
   opnameDetail opnameDetail[]
 }
@@ -85,6 +87,10 @@ model Rows {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   stock Stock?
+  warehouseId String
+  shelvesId String
+  warehouse Warehouses @relation(fields: [warehouseId], references: [id])
+  shelf Shelves @relation(fields: [shelvesId], references: [id])
   movingDetail movingDetail[]
   opnameDetail opnameDetail[]
 }
