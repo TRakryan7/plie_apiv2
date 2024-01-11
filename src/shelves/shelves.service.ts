@@ -6,6 +6,11 @@ import { ShelfParams } from './entity';
 export class ShelvesService {
   constructor(private prisma: PrismaService) {}
 
+  async getAllShelves() {
+    const getShelves = await this.prisma.shelves.findMany();
+    return getShelves;
+  }
+
   async getAllShelvesByWarehouseId(warehouseId: string) {
     const getSheleves = await this.prisma.shelves.findMany({
       where: {

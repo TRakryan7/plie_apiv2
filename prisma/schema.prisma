@@ -161,6 +161,7 @@ model movingDetail {
   shelvesId String
   itemId String
   rowsId String
+  period Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
@@ -191,7 +192,7 @@ model opnameHeader {
 
 model opnameDetail {
   id String @id @default(uuid())
-  itemDescription String
+  itemDescription String 
   size String
   category String
   color String
@@ -201,6 +202,7 @@ model opnameDetail {
   shelvesId String
   itemId String
   rowsId String
+  period Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

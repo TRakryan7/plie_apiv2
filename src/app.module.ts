@@ -9,6 +9,7 @@ import { WarehouseModule } from './warehouse/warehouse.module';
 import { ShelvesModule } from './shelves/shelves.module';
 import { RowsModule } from './rows/rows.module';
 import { StockModule } from './stock/stock.module';
+import { MovingItemModule } from './moving-item/moving-item.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { StockModule } from './stock/stock.module';
     ShelvesModule,
     RowsModule,
     StockModule,
+    MovingItemModule,
   ],
 })
 export class AppModule {}
