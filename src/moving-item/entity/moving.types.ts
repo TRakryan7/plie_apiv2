@@ -1,6 +1,5 @@
 export type MovingParams = {
   documentCode: string;
-  period: number;
   total: number;
   note: string;
   warehouseId: string;
@@ -13,10 +12,10 @@ export type MovingParams = {
       category: string;
       color: string;
       total: number;
+      note: string;
       shelvesId: string;
       itemId: string;
       rowsId: string;
-      period: number;
       createdBy: string;
       updatedBy: string;
     },
@@ -29,6 +28,7 @@ export type MovingDetailParams = {
   category: string;
   color: string;
   total: number;
+  note: string;
   shelvesId: string;
   itemId: string;
   rowsId: string;

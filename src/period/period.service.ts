@@ -17,24 +17,26 @@ export class PeriodService {
     }
 
     const periodCollect = periodMonth + periodYear;
-    const resultPeriod = await this.prisma.period.create({
-      data: {
-        periodCode: Number(periodCollect),
-      },
-    });
-    return resultPeriod.periodCode;
+
+    return periodCollect;
   }
 
-  async findPeriod(periodName: number) {
+  async findPeriod() {
+    const createdPeriod = await this.createPeriode();
+
     const getPeriod = await this.prisma.period.findFirst({
       where: {
-        periodCode: periodName,
+        periodCode: Number(createdPeriod),
       },
     });
     if (!getPeriod) {
-      const getPeriod = await this.createPeriode();
-      return getPeriod;
+      const resultPeriod = await this.prisma.period.create({
+        data: {
+          periodCode: Number(createdPeriod),
+        },
+      });
+      return resultPeriod.periodCode;
     }
-    return getPeriod;
+    return getPeriod.periodCode;
   }
 }

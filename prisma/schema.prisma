@@ -162,6 +162,7 @@ model movingDetail {
   itemId String
   rowsId String
   period Int
+  note String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
@@ -203,6 +204,7 @@ model opnameDetail {
   itemId String
   rowsId String
   period Int
+  note String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

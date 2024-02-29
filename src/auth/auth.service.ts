@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import * as Argon from 'argon2';
@@ -67,7 +67,12 @@ export class AuthService {
   async signToken(
     userId: string,
     email: string,
-  ): Promise<{ access_token: string }> {
+  ): Promise<{
+    status: number;
+    success: boolean;
+    message: string;
+    access_token: string;
+  }> {
     const secret = this.config.get('JWT_SECRET');
 
     const payload = {
@@ -75,13 +80,24 @@ export class AuthService {
       email,
     };
 
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '1h',
-      secret: secret,
-    });
-
-    return {
-      access_token: token,
-    };
+    try {
+      const token = await this.jwt.signAsync(payload, {
+        expiresIn: '1h',
+        secret: secret,
+      });
+      return {
+        message: 'login success',
+        success: true,
+        status: HttpStatus.OK,
+        access_token: token,
+      };
+    } catch (error) {
+      return {
+        message: 'Invalid email or password',
+        success: false,
+        status: HttpStatus.NOT_FOUND,
+        access_token: 'Null',
+      };
+    }
   }
 }

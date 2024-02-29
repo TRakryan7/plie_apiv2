@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { StockParams } from './entity';
+import { MovingDetailParams } from 'src/moving-item/entity';
 
 @Injectable()
 export class StockService {
@@ -44,17 +45,17 @@ export class StockService {
     return updateStock;
   }
 
-  async createStock(total: number, data: StockParams) {
+  async createStock(total: number, data: MovingDetailParams) {
     const getStockItem = await this.getStock(data.itemId, data.rowsId);
 
     if (getStockItem) {
       return await this.updateMovingStock(total, data.itemId, data.rowsId);
     }
 
-    const createNewStock = await this.prisma.stock.create({
-      data,
-    });
+    // const createNewStock = await this.prisma.stock.create({
+    //   data,
+    // });
 
-    return createNewStock;
+    // return createNewStock;
   }
 }

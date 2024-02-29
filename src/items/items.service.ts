@@ -18,9 +18,15 @@ export class ItemsService {
         const item = await this.prisma.items.create({
           data,
         });
-        return item;
+        return {
+          success: true,
+          message: 'Item Cretaed',
+          data: {
+            item: item,
+          },
+        };
       } catch (e) {
-        console.log(e);
+        throw new HttpException('Failed to create Item', HttpStatus.CONFLICT);
       }
     } else {
       throw new HttpException('Item code has been used', HttpStatus.CONFLICT);
@@ -28,12 +34,25 @@ export class ItemsService {
   }
 
   async getAllItem() {
-    const getItems = this.prisma.items.findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
-    return getItems;
+    try {
+      const getItems = await this.prisma.items.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
+      return {
+        success: true,
+        message: 'Data found',
+        data: {
+          items: getItems,
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Data not found',
+      };
+    }
   }
 
   async editItem(itemId: string, data: CreateItemParams) {
@@ -44,13 +63,27 @@ export class ItemsService {
     });
 
     if (getItem) {
-      const updatedItem = await this.prisma.items.update({
-        data,
-        where: {
-          id: itemId,
-        },
-      });
-      return updatedItem;
+      try {
+        const updatedItem = await this.prisma.items.update({
+          data,
+          where: {
+            id: itemId,
+          },
+        });
+        return {
+          success: true,
+          message: 'Data updated',
+          data: {
+            item: updatedItem,
+          },
+        };
+      } catch (e) {
+        return {
+          success: false,
+          message: 'Update failed',
+          detail: e,
+        };
+      }
     }
   }
 
