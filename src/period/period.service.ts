@@ -23,16 +23,18 @@ export class PeriodService {
 
   async findPeriod() {
     const createdPeriod = await this.createPeriode();
+    // console.log(Number(createdPeriod));
 
     const getPeriod = await this.prisma.period.findFirst({
       where: {
-        periodCode: Number(createdPeriod),
+        periodCode: createdPeriod,
       },
     });
+    // console.log(getPeriod);
     if (!getPeriod) {
       const resultPeriod = await this.prisma.period.create({
         data: {
-          periodCode: Number(createdPeriod),
+          periodCode: createdPeriod,
         },
       });
       return resultPeriod.periodCode;

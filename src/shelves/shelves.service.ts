@@ -21,6 +21,18 @@ export class ShelvesService {
     return getSheleves;
   }
 
+  async getShelfById(shelvesId: string){
+    const getSheleves = await this.prisma.shelves.findUnique({
+      where: {
+        id: shelvesId,
+      },
+    });
+    if (!getSheleves) {
+      throw new HttpException('shelves is  not found', HttpStatus.NOT_FOUND);
+    }
+    return getSheleves;
+  }
+
   async createShelf(data: ShelfParams) {
     const getWarehouse = await this.prisma.warehouses.findUnique({
       where: {

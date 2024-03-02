@@ -15,8 +15,10 @@ export class MovingHeaderDto {
       total: number;
       note: string;
       shelvesId: string;
+      movingHeaderId: string;
       itemId: string;
       rowsId: string;
+      period: number;
       createdBy: string;
       updatedBy: string;
     },
@@ -29,9 +31,11 @@ export class MovingDetailDto {
   category: string;
   color: string;
   total: number;
+  movingHeaderId: string;
   shelvesId: string;
   itemId: string;
   rowsId: string;
+  period: number;
   createdBy: string;
   updatedBy: string;
 }

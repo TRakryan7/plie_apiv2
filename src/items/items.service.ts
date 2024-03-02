@@ -55,6 +55,15 @@ export class ItemsService {
     }
   }
 
+  async getItemById(itemId: string) {
+    const getItem = await this.prisma.items.findUnique({
+      where: {
+        id: itemId,
+      },
+    });
+    return getItem;
+  }
+
   async editItem(itemId: string, data: CreateItemParams) {
     const getItem = await this.prisma.items.findUnique({
       where: {

@@ -100,7 +100,7 @@ model Stock {
   stockTotal Int
   stockIn Int
   stockOut Int
-  period Int
+  period String
   itemDescription String
   itemCode String
   size String
@@ -128,13 +128,13 @@ model Stock {
 
 model Period {
   id String @id @default(uuid())
-  periodCode Int
+  periodCode String
 }
 
 model movingHeader {
   id String @id @default(uuid())
   documentCode String @unique
-  period Int
+  period String
   total Int
   note String
   warehouseId String
@@ -147,7 +147,10 @@ model movingHeader {
   deletedBy String?
     // @OneToOne(()=>Warehouse)
     // @JoinColumn()
+  details movingDetail[]
   warehouse Warehouses @relation(fields: [warehouseId], references: [id])
+
+  
 
 }
 
@@ -161,7 +164,8 @@ model movingDetail {
   shelvesId String
   itemId String
   rowsId String
-  period Int
+  movingHeaderId String
+  period String
   note String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -171,13 +175,14 @@ model movingDetail {
   deletedBy String?
   item Items @relation(fields: [itemId], references: [id])
   shelf Shelves @relation(fields: [shelvesId], references: [id])
-  row Rows @relation(fields: [rowsId], references: [id])  
+  row Rows @relation(fields: [rowsId], references: [id])
+  header movingHeader @relation(fields: [movingHeaderId], references: [id])  
 }
 
 model opnameHeader {
   id String @id @default(uuid())
   documentCode String @unique
-  period Int
+  period String
   total Int
   note String
   warehouseId String
@@ -188,6 +193,7 @@ model opnameHeader {
   createdBy  String
   updatedBy String
   deletedBy String? 
+  details opnameDetail[]
   warehouse Warehouses @relation(fields: [warehouseId], references: [id])
 }
 
@@ -200,10 +206,11 @@ model opnameDetail {
   total Int
   totalSystem Int
   difference Int
+  opnameHeaderId String
   shelvesId String
   itemId String
   rowsId String
-  period Int
+  period String
   note String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -213,5 +220,6 @@ model opnameDetail {
   deletedBy String?
   item Items @relation(fields: [itemId], references: [id])
   shelf Shelves @relation(fields: [shelvesId], references: [id])
-  row Rows @relation(fields: [rowsId], references: [id])  
+  row Rows @relation(fields: [rowsId], references: [id])
+  header opnameHeader @relation(fields: [opnameHeaderId],references: [id])  
 }

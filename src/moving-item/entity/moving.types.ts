@@ -13,6 +13,8 @@ export type MovingParams = {
       color: string;
       total: number;
       note: string;
+      movingHeaderId: string;
+      period: string;
       shelvesId: string;
       itemId: string;
       rowsId: string;
@@ -29,10 +31,11 @@ export type MovingDetailParams = {
   color: string;
   total: number;
   note: string;
+  movingHeaderId: string;
   shelvesId: string;
   itemId: string;
   rowsId: string;
-  period: number;
+  period: string;
   createdBy: string;
   updatedBy: string;
 };

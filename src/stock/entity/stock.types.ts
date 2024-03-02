@@ -1,5 +1,5 @@
 export type StockParams = {
-  period: number;
+  period: string;
   stockTotal: number;
   stockIn: number;
   stockOut: number;

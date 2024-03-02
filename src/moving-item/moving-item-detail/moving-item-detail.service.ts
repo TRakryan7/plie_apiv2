@@ -10,28 +10,21 @@ export class MovingItemDetailService {
   constructor(
     private prisma: PrismaService,
     private stockService: StockService,
+    private periodeService: PeriodService,
   ) {}
 
-  // async createDetail(data: MovingDetailParams) {
-  //   const getPeriod = await this.periodService.findPeriod();
-  //   const stock = await this.stockService.createStock(data.total);
+  async createDetail(data: MovingDetailParams, warehouseId: string) {
+    // const getPeriod = await this.periodeService.findPeriod();
+    const stock = await this.stockService.createStock(
+      data.total,
+      data,
+      warehouseId,
+    );
+    
+    const createDetail = this.prisma.movingDetail.create({
+      data,
+    });
 
-  //   const createDetail = this.prisma.movingDetail.create({
-  //     data: {
-  //       itemDescription: data.itemDescription,
-  //       size: data.size,
-  //       category: data.category,
-  //       total: data.total,
-  //       note: data.note,
-  //       shelvesId: data.shelvesId,
-  //       itemId: data.itemId,
-  //       rowsId: data.rowsId,
-  //       period: getPeriod,
-  //       createdBy: data.createdBy,
-  //       updatedBy: data.updatedBy,
-  //     },
-  //   });
-
-  //   return;
-  // }
+    return createDetail;
+  }
 }

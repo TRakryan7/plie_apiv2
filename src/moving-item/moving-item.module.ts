@@ -5,6 +5,10 @@ import { MovingItemDetailService } from './moving-item-detail/moving-item-detail
 import { PeriodService } from 'src/period/period.service';
 import { StockService } from 'src/stock/stock.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ShelvesService } from 'src/shelves/shelves.service';
+import { RowsService } from 'src/rows/rows.service';
+import { ItemsService } from 'src/items/items.service';
+import { WarehouseService } from 'src/warehouse/warehouse.service';
 
 @Module({
   controllers: [MovingItemController],
@@ -14,6 +18,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
     PeriodService,
     StockService,
     PrismaService,
+    ShelvesService,
+    RowsService,
+    ItemsService,
+    WarehouseService,
   ],
 })
 export class MovingItemModule {}
