@@ -39,3 +39,32 @@ export class MovingDetailDto {
   createdBy: string;
   updatedBy: string;
 }
+
+export class MovingEditHeaderDto {
+  id: string;
+  documentCode: string;
+  period: number;
+  total: number;
+  note: string;
+  warehouseId: string;
+  createdBy: string;
+  updatedBy: string;
+  detail: [
+    {
+      id: string;
+      itemDescription: string;
+      size: string;
+      category: string;
+      color: string;
+      total: number;
+      note: string;
+      shelvesId: string;
+      movingHeaderId: string;
+      itemId: string;
+      rowsId: string;
+      period: number;
+      createdBy: string;
+      updatedBy: string;
+    },
+  ];
+}

@@ -1,10 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PeriodService } from 'src/period/period.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { StockService } from 'src/stock/stock.service';
 import { MovingItemDetailService } from './moving-item-detail/moving-item-detail.service';
-import { MovingParams } from './entity';
-import { WarehouseService } from 'src/warehouse/warehouse.service';
+import { MovingEditParams, MovingParams } from './entity';
 
 @Injectable()
 export class MovingItemService {
@@ -79,7 +77,53 @@ export class MovingItemService {
     };
   }
 
-  async updateMovingItem(movingHeadaer: MovingParams){}
+  async updateMovingItem(movingHeadaer: MovingEditParams) {
+    const getHeader = await this.prisma.movingHeader.findUnique({
+      where: {
+        documentCode: movingHeadaer.documentCode,
+      },
+      include: {
+        details: true,
+      },
+    });
+    // console.log(getHeader);
+    // cons
+    const detail = movingHeadaer.detail;
+    const date = new Date();
+    const data = {
+      documentCode: movingHeadaer.documentCode,
+      total: movingHeadaer.total,
+      note: movingHeadaer.note,
+      warehouseId: movingHeadaer.warehouseId,
+      updatedAt: date,
+    };
+    await this.prisma.movingHeader.update({
+      data,
+      where: {
+        id: getHeader.id,
+      },
+    });
+    for (const item of detail) {
+      this.movingDetailService.updateDetail(item);
+    }
+  }
 
-  async deleteMovingItem(id:string){}
+  async deleteMovingItem(id: string) {
+    const getHeader = await this.prisma.movingHeader.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    await this.prisma.movingHeader.update({
+      where: {
+        id: id,
+      },
+      data: { deletedAt: new Date() },
+    });
+    await this.movingDetailService.deleteDetail(id);
+    return {
+      success: true,
+      message: 'Data deleted',
+    };
+  }
 }

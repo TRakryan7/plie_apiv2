@@ -29,34 +29,6 @@ export class StockService {
     return getSTockItem;
   }
 
-  async updateMovingStock(total: number, itemId: string, rowId: string) {
-    const getStockItem = await this.prisma.stock.findUnique({
-      where: {
-        itemId: itemId,
-        rowsId: rowId,
-      },
-    });
-
-    if (total < 0) {
-      getStockItem.stockOut = getStockItem.stockOut + Math.abs(total);
-    } else {
-      getStockItem.stockIn = getStockItem.stockIn + total;
-    }
-    getStockItem.stockTotal = getStockItem.stockTotal + total;
-
-    const dataId = getStockItem.id;
-    delete getStockItem.id;
-    const data = getStockItem;
-
-    const updateStock = await this.prisma.stock.update({
-      data,
-      where: {
-        id: dataId,
-      },
-    });
-    return updateStock;
-  }
-
   async createStock(
     total: number,
     dataMoving: MovingDetailParams,
@@ -110,5 +82,55 @@ export class StockService {
     });
 
     return createNewStock;
+  }
+
+  async updateMovingStock(total: number, itemId: string, rowId: string) {
+    const getStockItem = await this.prisma.stock.findUnique({
+      where: {
+        itemId: itemId,
+        rowsId: rowId,
+      },
+    });
+
+    if (total < 0) {
+      getStockItem.stockOut = getStockItem.stockOut + Math.abs(total);
+    } else {
+      getStockItem.stockIn = getStockItem.stockIn + total;
+    }
+    getStockItem.stockTotal = getStockItem.stockTotal + total;
+
+    const dataId = getStockItem.id;
+    delete getStockItem.id;
+    const data = getStockItem;
+
+    const updateStock = await this.prisma.stock.update({
+      data,
+      where: {
+        id: dataId,
+      },
+    });
+    return updateStock;
+  }
+
+  async updateWhenMinusTotal(total: number, itemId: string, rowId: string) {
+    const getStockItem = await this.prisma.stock.findUnique({
+      where: {
+        itemId: itemId,
+        rowsId: rowId,
+      },
+    });
+    getStockItem.stockOut = getStockItem.stockOut - total;
+    getStockItem.stockTotal = getStockItem.stockTotal + Math.abs(total);
+    const dataId = getStockItem.id;
+    delete getStockItem.id;
+    const data = getStockItem;
+
+    const updateStock = await this.prisma.stock.update({
+      data,
+      where: {
+        id: dataId,
+      },
+    });
+    return updateStock;
   }
 }
