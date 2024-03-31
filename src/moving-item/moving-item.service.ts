@@ -12,6 +12,43 @@ export class MovingItemService {
     private movingDetailService: MovingItemDetailService,
   ) {}
 
+  async getAllMovingTrancationService() {
+    try {
+      const data = await this.prisma.movingHeader.findMany({
+        where: {
+          deletedAt: null,
+        },
+      });
+      return {
+        success: true,
+        message: 'Data Found',
+        data: data,
+      };
+    } catch (e) {
+      throw new HttpException('Failed to find document', HttpStatus.CONFLICT);
+    }
+  }
+
+  async getMovingTrancationByIdService(id: string) {
+    try {
+      const data = await this.prisma.movingHeader.findFirst({
+        where: {
+          id: id,
+        },
+        include: {
+          details: true,
+        },
+      });
+      return {
+        success: true,
+        message: 'Data Found',
+        data: data,
+      };
+    } catch (e) {
+      throw new HttpException('Failed to find document', HttpStatus.CONFLICT);
+    }
+  }
+
   async createMovingItem(movingHeadaer: MovingParams) {
     const getPeriod = await this.periodService.findPeriod();
     const detailData = movingHeadaer.detail;
@@ -109,7 +146,7 @@ export class MovingItemService {
   }
 
   async deleteMovingItem(id: string) {
-    const getHeader = await this.prisma.movingHeader.findUnique({
+    await this.prisma.movingHeader.findUnique({
       where: {
         id: id,
       },

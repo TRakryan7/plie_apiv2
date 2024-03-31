@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { MovingItemService } from './moving-item.service';
 import { JwtGuard } from 'src/auth/guard';
 import { MovingEditParams, MovingParams } from './entity';
@@ -6,6 +15,18 @@ import { MovingEditParams, MovingParams } from './entity';
 @Controller('moving-item')
 export class MovingItemController {
   constructor(private movingItem: MovingItemService) {}
+
+  @UseGuards(JwtGuard)
+  @Get('all')
+  async getAllMovingTrancation() {
+    return this.movingItem.getAllMovingTrancationService();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('get/:id')
+  async getMovingTrancationById(@Param('id') id: string) {
+    return this.movingItem.getMovingTrancationByIdService(id);
+  }
 
   @UseGuards(JwtGuard)
   @Post('transaction')
